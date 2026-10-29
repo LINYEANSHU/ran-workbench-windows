@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>城市无线传播工作台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/vendor/cesium/Widgets/widgets.css">
+  <link rel="stylesheet" href="/style.css">
+  <script>window.CESIUM_BASE_URL = '/vendor/cesium/';</script>
+  <script defer src="/vendor/cesium/Cesium.js"></script>
+  <script defer src="/qtwebchannel.js"></script>
+  <script defer src="/heatmap.js"></script>
+  <script defer src="/multi_bs.js"></script>
+  <script defer src="/i18n.js"></script>
+  <script defer src="/i18n_workbench.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body data-ready="false">
+  <header class="topbar">
+    <div class="app-title">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 24V11h6v13m3 0V4h6v20m3 0V15h4v9M2 24h24"/></svg>
+      <h1>城市无线传播</h1><span class="app-kind">三维射频仪器</span>
+    </div>
+    <div class="runtime"><span id="status-dot" class="status-dot"></span><span id="runtime-status" role="status">正在连接本机工作台…</span></div>
+  </header>
+  <nav class="commandbar" aria-label="项目文件">
+    <div class="file-actions">
+      <button id="project-new" data-mutation type="button">新建</button>
+      <button id="project-open" data-mutation type="button">打开</button>
+      <button id="project-save" data-native type="button">保存</button>
+      <button id="project-save-as" data-native type="button">另存为</button>
+      <button id="export-result" data-native type="button" disabled>导出结果</button>
+      <button id="workspace-strategy" type="button">BS / UE 策略仿真</button>
+    </div>
+    <div class="project-document"><span id="project-title">等待项目</span><span id="dirty-state" class="dirty-state"></span><span id="project-path" class="project-path" data-i18n-ignore></span></div>
+  </nav>
+  <div id="global-message" class="global-message" role="alert" hidden><span id="global-message-text"></span><button id="dismiss-message" type="button" aria-label="关闭提示">关闭</button></div>
+  <main class="workspace">
+    <aside class="panel editor-panel" aria-label="场景编辑">
+      <div class="tabs" role="tablist" aria-label="编辑分类">
+        <button id="tab-scene" role="tab" aria-controls="pane-scene" aria-selected="true" tabindex="0" data-left-tab="scene" type="button">场景</button>
+        <button id="tab-buildings" role="tab" aria-controls="pane-buildings" aria-selected="false" tabindex="-1" data-left-tab="buildings" type="button">建筑</button>
+        <button id="tab-devices" role="tab" aria-controls="pane-devices" aria-selected="false" tabindex="-1" data-left-tab="devices" type="button">设备</button>
+        <button id="tab-simulation" role="tab" aria-controls="pane-simulation" aria-selected="false" tabindex="-1" data-left-tab="simulation" type="button">计算</button>
+      </div>
+      <div class="panel-scroll">
+        <section id="pane-scene" role="tabpanel" aria-labelledby="tab-scene" class="tab-pane">
+          <h2>项目与坐标</h2>
+          <p id="source-notice" class="notice">正在读取本机项目。</p>
+          <form id="project-form">
+            <fieldset data-edit-fieldset disabled>
+              <label>项目名称<input id="project-name" name="name" required maxlength="120"></label>
+              <div class="fields two"><label>载频 / GHz<input id="frequency" type="number" min="0.000001" step="any" required></label><label>带宽 / MHz<input id="bandwidth" type="number" min="0" step="any" required></label></div>
+              <h3>局部 ENU 原点</h3>
+              <div class="fields two"><label>经度 / °<input id="longitude" type="number" min="-180" max="180" step="any" required></label><label>纬度 / °<input id="latitude" type="number" min="-90" max="90" step="any" required></label></div>
+              <label>椭球高 / m<input id="origin-height" type="number" step="any" required></label>
+              <p class="help">E 向东、N 向北、U 向上。U 为相对原点的局部高度；地面采用局部平面。</p>
+              <button class="primary" type="submit">应用项目参数</button>
+            </fieldset>
+          </form>
+          <section class="form-section">
+            <h3>导入建筑轮廓</h3>
+            <form id="import-form">
+              <fieldset data-edit-fieldset disabled>
+                <label>源坐标系<select id="import-crs"><option value="EPSG:4326">WGS84 (EPSG:4326)</option><option value="EPSG:2326">香港 1980 网格 (EPSG:2326)</option></select></label>
+                <div class="fields two"><label>建筑高度字段<input id="height-field" value="height" placeholder="height"></label><label>底面高度字段<input id="base-field" value="" placeholder="留空取 0"></label></div>
+                <label>缺失高度默认值 / m<input id="default-height" type="number" min="0.01" step="any" value="20" required></label>
+                <button type="submit">选择 GeoJSON 并导入</button>
+              </fieldset>
+            </form>
+            <p class="help">支持 Polygon / MultiPolygon 和孔洞。未给出的材质假定为 ITU 混凝土、材料层厚度 0.2 m；底面字段不自动进行 HKPD 垂直基准转换。</p>
+          </section>
+          <dl id="scene-counts" class="compact-values"></dl>
+        </section>
+
+        <section id="pane-buildings" role="tabpanel" aria-labelledby="tab-buildings" class="tab-pane" hidden>
+          <h2>建筑几何</h2>
+          <label>选择建筑<select id="building-picker" aria-label="选择要编辑的建筑"><option value="">尚无建筑</option></select></label>
+          <p id="building-source" class="help"></p>
+          <form id="building-form">
+            <fieldset id="building-editor-fields" disabled>
+              <label>名称<input id="building-name" required maxlength="120"></label>
+              <div class="fields two"><label>中心 E / m<input id="building-east" type="number" step="any" required></label><label>中心 N / m<input id="building-north" type="number" step="any" required></label></div>
+              <div class="fields two"><label>平面宽 / m<input id="building-width" type="number" min="0.01" step="any" required></label><label>平面深 / m<input id="building-depth" type="number" min="0.01" step="any" required></label></div>
+              <div class="fields two"><label>平面旋转 / °<input id="building-rotation" type="number" step="any" required></label><label>底面 U / m<input id="building-base" type="number" min="0" step="any" required></label></div>
+              <div class="fields two"><label>建筑高度 / m<input id="building-height" type="number" min="0.01" step="any" required></label><label>材料层厚度 / m<input id="building-thickness" type="number" min="0.0001" step="any" required></label></div>
+              <label>假定电磁材质<select id="building-material"><option value="concrete">ITU 混凝土（假定）</option><option value="glass">ITU 玻璃（假定）</option></select></label>
+              <p id="building-geometry-info" class="help"></p>
+              <div class="button-row"><button class="primary" type="submit">应用建筑修改</button><button id="building-delete" class="danger" type="button">删除</button></div>
+            </fieldset>
+          </form>
+          <section class="form-section">
+            <h3>新增建筑</h3>
+            <form id="create-building-form">
+              <fieldset data-edit-fieldset disabled>
+                <label>轮廓类型<select id="create-shape"><option value="polygon">在场景绘制多边形</option><option value="circle">圆形 (48 段多边形)</option></select></label>
+                <div id="circle-fields" hidden><div class="fields two"><label>圆心 E / m<input id="circle-east" type="number" value="0" step="any"></label><label>圆心 N / m<input id="circle-north" type="number" value="0" step="any"></label></div><label>半径 / m<input id="circle-radius" type="number" min="0.01" value="10" step="any"></label></div>
+                <div class="fields two"><label>高度 / m<input id="create-height" type="number" min="0.01" value="20" step="any" required></label><label>底面 U / m<input id="create-base" type="number" min="0" value="0" step="any" required></label></div>
+                <div class="fields two"><label>厚度 / m<input id="create-thickness" type="number" min="0.0001" value="0.2" step="any" required></label><label>假定材质<select id="create-material"><option value="concrete">ITU 混凝土</option><option value="glass">ITU 玻璃</option></select></label></div>
+                <button id="create-building" type="submit">开始绘制多边形</button>
+              </fieldset>
+            </form>
+            <div id="drawing-controls" hidden><p id="drawing-summary" class="help">已绘制 0 个顶点</p><div class="button-row"><button id="finish-drawing" class="primary" type="button">完成建筑</button><button id="undo-drawing" type="button">撤销点</button><button id="cancel-drawing" type="button">取消</button></div></div>
+            <p class="help">宽和深按轮廓局部方向缩放，孔洞随轮廓一同变换。建筑高度与材料层厚度独立。</p>
+          </section>
+        </section>
+
+        <section id="pane-devices" role="tabpanel" aria-labelledby="tab-devices" class="tab-pane" hidden>
+          <div class="section-heading"><h2>三维部署</h2><button id="new-device" data-mutation type="button">新增设备</button></div>
+          <label>设备类型<select id="device-kind"><option value="bs">基站 BS</option><option value="ues">用户终端 UE</option></select></label>
+          <div id="device-list" class="device-list" role="list" aria-label="场景中的设备"></div>
+          <form id="device-form">
+            <fieldset data-edit-fieldset disabled>
+              <div class="section-heading"><h3 id="device-editor-title">新增基站</h3><span id="device-id" class="muted"></span></div>
+              <label>设备名称<input id="device-name" required maxlength="120"></label>
+              <div class="fields three"><label>E / m<input id="device-east" type="number" step="any" required></label><label>N / m<input id="device-north" type="number" step="any" required></label><label>U / m<input id="device-up" type="number" min="0" step="any" required></label></div>
+              <div id="bs-fields">
+                <label>发射功率 / dBm<input id="bs-power" type="number" step="any" value="30"></label>
+                <div class="fields three"><label>偏航 / °<input id="bs-yaw" type="number" step="any" value="0"></label><label>俯仰 / °<input id="bs-pitch" type="number" step="any" value="0"></label><label>滚转 / °<input id="bs-roll" type="number" step="any" value="0"></label></div>
+                <p class="help">单天线、垂直极化。姿态影响极化耦合；各向同性增益不随朝向变化。</p>
+                <h3>多站资源与同步</h3>
+                <div class="fields two"><label>资源信道编号<input id="bs-channel" type="number" min="0" max="1023" step="1" value="0"></label><label>干扰占用率 / 0–1<input id="bs-activity" type="number" min="0" max="1" step="any" value="1"></label></div>
+                <div class="fields two"><label>发送相位 / °<input id="bs-phase" type="number" min="-1000000" max="1000000" step="any" value="0"></label><label>基带时偏 / ns<input id="bs-time-offset" type="number" min="-1000000" max="1000000" step="any" value="0"></label></div>
+                <p class="help">最多 5 个 BS。同编号资源互扰，异编号理想正交；占用率用于其他站的干扰。相位、时偏仅用于同数据协作试验，不会把普通干扰算成增强。</p>
+              </div>
+              <button id="apply-device" class="primary" type="submit">添加基站</button>
+              <div class="button-row below"><button id="place-device" type="button">在场景中放置</button><button id="delete-device" class="danger" type="button" disabled>删除设备</button></div>
+            </fieldset>
+          </form>
+          <p class="help">放置模式下点击地面确定 E、N，U 使用表单值。所有设备必须在建筑外；坐标是否有效由本机模型验证。</p>
+        </section>
+
+        <section id="pane-simulation" role="tabpanel" aria-labelledby="tab-simulation" class="tab-pane" hidden>
+          <h2>三维空间采样</h2>
+          <form id="simulation-form">
+            <fieldset data-edit-fieldset disabled>
+              <div class="grid-presets" role="group" aria-label="采样几何模式选择">
+                <span class="preset-label">采样几何模式</span>
+                <button type="button" class="preset-btn" id="sampling-mode-grid" aria-pressed="true">笛卡尔体网格</button>
+                <button type="button" class="preset-btn" id="sampling-mode-sphere" aria-pressed="false">扩展球面网格</button>
+              </div>
+
+              <div id="grid-sampling-container">
+                <div class="sampling-grid"><span></span><span>E / m</span><span>N / m</span><span>U / m</span>
+                  <label for="sample-min-e">下界</label><input id="sample-min-e" aria-label="采样 E 下界，米" type="number" step="any" required><input id="sample-min-n" aria-label="采样 N 下界，米" type="number" step="any" required><input id="sample-min-u" aria-label="采样 U 下界，米" type="number" min="0" step="any" required>
+                  <label for="sample-max-e">上界</label><input id="sample-max-e" aria-label="采样 E 上界，米" type="number" step="any" required><input id="sample-max-n" aria-label="采样 N 上界，米" type="number" step="any" required><input id="sample-max-u" aria-label="采样 U 上界，米" type="number" min="0" step="any" required>
+                  <label for="sample-step-e">间距</label><input id="sample-step-e" aria-label="采样 E 间距，米" type="number" min="0.000001" step="any" required><input id="sample-step-n" aria-label="采样 N 间距，米" type="number" min="0.000001" step="any" required><input id="sample-step-u" aria-label="采样 U 间距，米" type="number" min="0.000001" step="any" required>
+                </div>
+                <div class="grid-presets" role="group" aria-label="采样网格间距预设">
+                  <span class="preset-label">网格间距预设</span>
+                  <button type="button" class="preset-btn" id="preset-grid-20" data-preset="20">20m 稀疏</button>
+                  <button type="button" class="preset-btn" id="preset-grid-10" data-preset="10">10m 标准</button>
+                  <button type="button" class="preset-btn" id="preset-grid-5" data-preset="5">5m 精细</button>
+                </div>
+              </div>
+
+              <div id="sphere-sampling-container" hidden>
+                <div class="fields two">
+                  <label>球心定位<select id="surface-center-mode"><option value="bs">跟随基站位置</option><option value="manual">手动输入 ENU</option></select></label>
+                  <label id="surface-center-bs-wrap">球心关联基站<select id="surface-center-bs"><option value="">尚无基站</option></select></label>
+                </div>
+                <div id="surface-center-manual-wrap" class="fields three" hidden>
+                  <label>球心 E / m<input id="surface-center-e" type="number" step="any" value="0"></label>
+                  <label>球心 N / m<input id="surface-center-n" type="number" step="any" value="0"></label>
+                  <label>球心 U / m<input id="surface-center-u" type="number" min="0" step="any" value="25"></label>
+                </div>
+                <label>展开半径序列 / m<input id="surface-radii" type="text" value="25, 50, 75, 100" placeholder="例如：25, 50, 75, 100" required></label>
+                <p class="help">球心关联只确定采样几何；项目内全部基站均参与覆盖和干扰计算。</p>
+                <div class="grid-presets" role="group" aria-label="球面半径预设">
+                  <span class="preset-label">常用半径预设</span>
+                  <button type="button" class="preset-btn" id="preset-radii-dense" data-radii="15, 30, 45, 60">近场精细 15–60m</button>
+                  <button type="button" class="preset-btn" id="preset-radii-standard" data-radii="25, 50, 75, 100">标准街区 25–100m</button>
+                  <button type="button" class="preset-btn" id="preset-radii-wide" data-radii="50, 100, 150, 200">开阔覆盖 50–200m</button>
+                </div>
+                <div class="fields two">
+                  <label>测地细分等级 (0–6)<input id="surface-subdivisions" type="number" min="0" max="6" step="1" value="3" required></label>
+                  <label>独立重复次数 (1–8)<input id="surface-replicates" type="number" min="1" max="8" step="1" value="2" required></label>
+                </div>
+                <label>射线分块上限<input id="surface-chunk-size" type="number" min="1024" max="2000000" step="1" value="1000000" required></label>
+                <div id="surface-work-estimate" class="help"></div>
+              </div>
+
+              <div id="sampling-preview" class="sampling-preview" role="status">读取采样范围…</div>
+              <p id="sampling-help" class="help">点阵按间距采样，包含可整除的端点；球面按三角面片采样。计算前排除建筑内点、地下或与建筑相交的面片。单次最多 250,000 个请求单元；接收点批量和射线分块控制计算资源，不改变几何分辨率。</p>
+              <h3>传播求解</h3>
+              <div class="mechanisms"><label class="toggle"><input id="solver-los" type="checkbox" checked>直达</label><label class="toggle"><input id="solver-specular" type="checkbox" checked>镜面反射</label><label class="toggle"><input id="solver-diffuse" type="checkbox">漫反射</label><label class="toggle"><input id="solver-refraction" type="checkbox">薄层透射</label></div>
+              <p class="help">仅计算面上的交互；棱边、顶角周围 5 厘米内的交互均排除。混合路径只要有一个交互点进入排除区，整条路径就不参与计算。</p>
+              <div class="fields two"><label>最大交互深度<input id="solver-depth" type="number" min="0" max="10" step="1" required></label><label>每源射线数<input id="solver-samples" type="number" min="1" max="10000000" step="1" required></label></div>
+              <div class="fields two"><label>分批点数<input id="solver-batch" type="number" min="1" max="1024" step="1" required></label><label>随机种子<input id="solver-seed" type="number" min="0" step="1" required></label></div>
+              <label>漫反射散射系数<input id="solver-scattering" type="number" min="0" max="1" step="any" required></label>
+              <h3>接收机噪声</h3>
+              <div class="fields two"><label>噪声温度 / K<input id="network-temperature" type="number" min="1" max="500" step="any" value="290" required></label><label>噪声系数 / dB<input id="network-noise-figure" type="number" min="0" max="40" step="any" value="7" required></label></div>
+              <p class="help">噪声按 kTB 与噪声系数计算；带宽使用项目参数。网络 SINR 采用非相干路径功率、最强站服务和其他同信道站干扰。</p>
+              <button class="primary" type="submit">应用采样与求解设置</button>
+            </fieldset>
+          </form>
+          <p class="help">仅计算面内部的交互，透射采用薄材料层模型。材料参数为假定值；接收功率不是 5G NR 的 RSRP。</p>
+        </section>
+      </div>
+      <div class="run-controls">
+        <div id="job-stage" class="job-stage" role="status">本机计算尚未就绪</div>
+        <progress id="job-progress" max="1" value="0" aria-label="传播计算进度"></progress>
+        <button id="run-heatmap" class="primary" type="button" disabled>全部基站 · 计算热力图</button>
+        <p id="calculation-scope" class="help" role="status">计算范围：项目内全部基站</p>
+        <p id="quick-heatmap-note" class="quick-heatmap-note">接收高度 1.5 m · 每格 5 × 5 m</p>
+        <div class="button-row"><button id="run-coverage" type="button" disabled>全站三维覆盖</button><button id="run-ue" type="button" disabled>全站 UE 计算</button><button id="cancel-job" class="danger" type="button" hidden>取消</button></div>
+      </div>
+    </aside>
+
+    <section class="map-area" aria-label="三维场景与空间点云">
+      <div id="cesium" aria-label="三维局部 ENU 场景"></div>
+      <div class="map-toolbar"><div class="mode-buttons" role="group" aria-label="场景操作模式"><button id="mode-select" data-mode="select" type="button" aria-pressed="true">选择</button><button id="mode-place-bs" data-mode="place-bs" data-mutation type="button" aria-pressed="false">放置 BS</button><button id="mode-place-ue" data-mode="place-ues" data-mutation type="button" aria-pressed="false">放置 UE</button><button id="mode-draw" data-mode="draw" data-mutation type="button" aria-pressed="false">绘制建筑</button></div><div class="camera-buttons"><button id="overview" type="button" title="查看整个场景">三维</button><button id="top-view" type="button" title="俯视整个场景">俯视</button><button id="heatmap-view" type="button" aria-pressed="false">热力图</button></div></div>
+      <div id="mode-instruction" class="map-instruction" role="status">拖动浏览 · 右键旋转 · 滚轮缩放 · 点击选择对象</div>
+      <div id="map-placeholder" class="map-placeholder"><p>正在初始化本地三维场景…</p></div>
+      <div id="point-inspector" class="point-inspector" hidden></div>
+      <div id="map-legend" class="map-legend"><div><strong id="legend-title">路径功率非相干和</strong><span id="legend-unit">dBm</span></div><div class="color-scale"></div><div id="legend-ticks" class="legend-ticks"><span>−110</span><span>−90</span><span>−65</span><span>−40</span></div><p id="point-cloud-count">尚无三维覆盖结果</p><p id="heatmap-legend-note" hidden>灰色：未解析 / 缺测；建筑投影留空</p></div>
+      <div class="map-coordinate-note">局部 ENU · 平坦地面 · 离线场景</div>
+    </section>
+
+    <aside class="panel results-panel" aria-label="计算结果与显示控制">
+      <div class="tabs" role="tablist" aria-label="结果分类"><button id="tab-results" role="tab" aria-controls="pane-results" aria-selected="true" tabindex="0" data-right-tab="results" type="button">计算结果</button><button id="tab-display" role="tab" aria-controls="pane-display" aria-selected="false" tabindex="-1" data-right-tab="display" type="button">显示控制</button></div>
+      <div class="panel-scroll">
+        <section id="pane-results" role="tabpanel" aria-labelledby="tab-results" class="tab-pane">
+          <h2>传播结果</h2>
+          <p id="result-summary" class="result-summary">点击左下方“计算热力图”，查看建筑对信号的遮挡效果。</p>
+          <div id="result-content" hidden>
+            <dl id="result-metadata" class="compact-values"></dl>
+
+            <div id="surface-result-section" class="form-section" hidden>
+              <div class="section-heading"><h3>球面测量表面</h3><span id="surface-mesh-summary" class="muted"></span></div>
+              <p id="surface-mesh-note" class="help"></p>
+              <dl id="surface-metadata" class="compact-values"></dl>
+            </div>
+
+            <div id="probe-result-section" class="form-section" hidden>
+              <div class="section-heading"><h3 class="probe-title">单点多径精算</h3><button id="clear-probe" type="button" class="preset-btn">清除探测</button></div>
+              <p id="probe-ue-position" class="coordinates"></p>
+              <p class="notice probe-notice">单天线极化对准接收，基于复数冲击响应 (CIR) 计算相干干涉与带内频响；与球面面积平均标量功率不同。</p>
+              <div class="table-scroll"><table class="link-table"><thead><tr><th scope="col">基站</th><th scope="col">非相干</th><th scope="col">相干</th><th scope="col">带宽平均</th></tr></thead><tbody id="probe-link-table"></tbody></table></div>
+              <div id="probe-network" class="network-result"></div>
+              <dl id="probe-link-metrics" class="compact-values"></dl>
+              <div class="section-heading"><h3>探测多径折线</h3><span id="probe-path-count" class="muted"></span></div>
+              <div class="table-scroll path-scroll" tabindex="0" role="region" aria-label="探测多径列表，可滚动查看"><table class="path-table"><thead><tr><th scope="col">类型</th><th scope="col">功率<br><span class="unit">dBm</span></th><th scope="col">时延<br><span class="unit">ns</span></th><th scope="col">相位<br><span class="unit">°</span></th></tr></thead><tbody id="probe-path-table"></tbody></table></div>
+              <p id="probe-path-detail" class="help"></p>
+              <div class="form-section"><h3>带内频率响应 (探测点)</h3><div id="probe-cfr-chart" class="cfr-chart"></div></div>
+            </div>
+
+            <label>用户终端<select id="result-ue"><option value="">无 UE 计算结果</option></select></label>
+            <div id="ue-result" hidden>
+              <p id="result-ue-position" class="coordinates"></p>
+              <label class="below">UE 链路查看范围<select id="result-link"></select></label>
+              <div id="ue-network" class="network-result"></div>
+              <h3>各基站接收功率 / dBm</h3>
+              <div class="table-scroll"><table class="link-table"><thead><tr><th scope="col">基站</th><th scope="col">非相干</th><th scope="col">相干</th><th scope="col">带宽平均</th></tr></thead><tbody id="link-table"></tbody></table></div>
+              <dl id="link-metrics" class="compact-values"></dl>
+              <section class="form-section"><div class="section-heading"><h3>复数多径</h3><span id="path-count" class="muted"></span></div><p id="path-note" class="help"></p><div class="table-scroll path-scroll" tabindex="0" role="region" aria-label="多径列表，可滚动查看"><table class="path-table"><thead><tr><th scope="col">类型</th><th scope="col">功率<br><span class="unit">dBm</span></th><th scope="col">时延<br><span class="unit">ns</span></th><th scope="col">相位<br><span class="unit">°</span></th></tr></thead><tbody id="path-table"></tbody></table></div><p id="path-detail" class="help"></p></section>
+              <section class="form-section"><h3>带内频率响应</h3><div id="cfr-chart" class="cfr-chart"></div><p class="help">横轴为相对载频的频偏，纵轴为信道增益 / dB；来自本次复数路径结果。</p></section>
+            </div>
+            <p id="no-ue-result" class="help">本次结果没有 UE 路径。部署终端后运行“计算 UE”。</p>
+            <p id="result-warnings" class="notice" hidden></p>
+            <p id="scene-hash" class="scene-hash"></p>
+          </div>
+        </section>
+        <section id="pane-display" role="tabpanel" aria-labelledby="tab-display" class="tab-pane" hidden>
+          <h2>查看覆盖</h2>
+          <label>视图<select id="coverage-mode"><option value="cloud">三维点云 / 球面</option><option value="heatmap">热力图</option></select></label>
+          <label>查看范围<select id="display-bs"><option value="">全部基站 · 自动选择服务站</option></select></label>
+          <label>全网 / 链路指标<select id="coverage-metric"><option value="received">服务站接收功率</option><option value="sinr_db">SINR · 包含同频干扰</option><option value="interference_dbm">同频干扰功率</option><option value="total_received_dbm">全站满功率接收和（含干扰）</option><option value="snr_db">SNR · 仅信号与噪声</option><option value="cooperative_dbm">协作试验 · 功率和</option><option value="cooperation_gain_db">协作试验 · 功率合并增益</option><option value="carrier_joint_dbm">同步试验 · 载频相干功率</option></select></label>
+          <p id="network-metric-note" class="help">一次任务计算全部基站；单站查看保留其他同频站的干扰。全站功率和为配置满功率参考；SINR 的干扰另按信道与占用率计算。</p>
+          <section id="heatmap-controls" class="form-section" hidden>
+            <label id="heatmap-height-wrap">接收高度 / m<input id="heatmap-height" type="number" min="0" step="any" value="1.5"></label>
+            <label>重新计算每格大小<select id="heatmap-spacing"><option value="5">5 m × 5 m</option><option value="2">2 m × 2 m</option><option value="1">1 m × 1 m</option><option value="10">10 m × 10 m（快速）</option><option value="project">沿用项目间距</option></select></label>
+            <button id="run-heatmap-plane" data-mutation type="button">按此高度重新计算</button>
+            <p class="help">更细网格会增加真实采样点和计算量。网格大小不代表已验证的物理误差。</p>
+            <p id="heatmap-status" class="help" role="status">点击“计算热力图”即可查看。</p>
+            <details id="heatmap-advanced" class="advanced-section">
+              <summary>高度范围统计</summary>
+              <label>统计方式<select id="heatmap-aggregation"><option value="slice">固定高度（默认）</option><option value="mean">线性功率均值</option><option value="p10">P10 弱覆盖</option><option value="coverage">达标比例下界</option></select></label>
+              <div id="heatmap-range-wrap" class="fields two" hidden><label>高度下界 / m<input id="heatmap-zmin" type="number" min="0" step="any" value="0"></label><label>高度上界 / m<input id="heatmap-zmax" type="number" min="0" step="any" value="50"></label></div>
+              <label id="heatmap-threshold-wrap" hidden>达标门限 / <span id="heatmap-threshold-unit">dBm</span><input id="heatmap-threshold" type="number" step="any" value="-90"></label>
+              <p class="help">复用已有三维网格。均值和 P10 遇到缺测列留灰；达标比例把未解析样本计为尚未达标。</p>
+            </details>
+          </section>
+          <div id="sphere-display-controls" class="form-section" style="margin-top:0;padding-top:0;border-top:none" hidden>
+            <label>球面呈现形式<select id="surface-display-mode"><option value="mesh">面片着色表面</option><option value="points">面片质心点云</option></select></label>
+            <label>聚焦球面半径<select id="display-radius"><option value="all">全部计算半径</option></select></label>
+            <div class="radius-player" id="radius-player-controls">
+              <button id="radius-play-btn" type="button" class="preset-btn">▶ 播放扩展</button>
+              <input id="radius-slider" type="range" min="0" max="0" value="0" aria-label="展开半径滑块">
+              <span id="radius-slider-label" class="preset-label">-</span>
+            </div>
+          </div>
+          <details id="display-advanced" class="advanced-section">
+          <summary>高级显示与图层</summary>
+          <label>功率口径<select id="color-mode"><option value="incoherent_dbm">路径功率非相干和</option><option value="coherent_dbm">载频相干功率</option><option value="wideband_dbm">带宽平均功率</option></select></label>
+          <p id="color-mode-note" class="help" hidden>球面覆盖为面片非相干面积平均，不提供相干干涉口径。</p>
+          <div class="fields two"><label>点大小 / px<input id="point-size" type="number" min="1" max="20" step="1" value="5"></label><label>透明度<input id="point-opacity" type="number" min="0.05" max="1" step="0.05" value="0.8"></label></div>
+          <div class="fields two"><label>高度下切 / m<input id="display-zmin" type="number" min="0" step="any" placeholder="不限"></label><label>高度上切 / m<input id="display-zmax" type="number" min="0" step="any" placeholder="不限"></label></div>
+          <label>最低接收功率 / dBm<input id="minimum-power" type="number" step="1" value="-120"></label>
+          <p id="display-filter-status" class="help" role="status"></p>
+          <section class="form-section"><h3>图层</h3><label class="toggle"><input id="show-points" type="checkbox" checked>空间采样覆盖 (网格/点云)</label><label class="toggle" id="show-surface-mesh-wrap" hidden><input id="show-surface-mesh" type="checkbox" checked>球面测量面片网格</label><label class="toggle"><input id="show-paths" type="checkbox" checked>传播路径与单点探测射线</label><label class="toggle"><input id="show-buildings" type="checkbox" checked>建筑闭合网格</label><label class="toggle"><input id="show-devices" type="checkbox" checked>BS / UE 与高度杆</label><label class="toggle"><input id="show-sampling" type="checkbox" checked>三维采样边界</label><label class="toggle"><input id="show-axes" type="checkbox" checked>局部原点与 E / N / U 轴</label><label class="toggle"><input id="show-grid" type="checkbox" checked>地面参考网格</label></section>
+          <p class="help">显示设置只改变视图，不修改项目。无有效路径的功率为空；相干完全相消显示为 −∞ dBm，均不伪造数值点。</p>
+          </details>
+        </section>
+      </div>
+    </aside>
+  </main>
+  <footer><span id="footer-state">本地资源 · CesiumJS 三维显示 · Sionna RT 传播计算</span><span id="footer-selection">选择模式</span></footer>
+  <div id="accessible-tooltip" class="accessible-tooltip" role="tooltip" aria-hidden="true" hidden>
+    <div class="tooltip-header">
+      <span id="tooltip-title" class="tooltip-title"></span>
+      <span id="tooltip-tag" class="tooltip-tag"></span>
+    </div>
+    <div id="tooltip-desc" class="tooltip-desc"></div>
+    <div id="tooltip-meta" class="tooltip-meta"></div>
+    <div id="tooltip-impact" class="tooltip-impact"></div>
+  </div>
+</body>
+</html>

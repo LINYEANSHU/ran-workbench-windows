@@ -1,0 +1,32 @@
+{
+  "upstream": "NVlabs/sionna",
+  "tag": "v2.2.0",
+  "commit": "2f0a3820269b53fd022780a6f2f5f720f7ceb9b4",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "path": "PDSCH_table1.json",
+      "source": "https://raw.githubusercontent.com/NVlabs/sionna/2f0a3820269b53fd022780a6f2f5f720f7ceb9b4/src/sionna/sys/bler_tables/PDSCH_table1.json",
+      "sha256": "cf37d854d13c71a66da439982ff4918f22fd32d425248be0f77429776116b43a",
+      "bytes": 195082
+    },
+    {
+      "path": "eesm_beta_table.json",
+      "source": "https://raw.githubusercontent.com/NVlabs/sionna/2f0a3820269b53fd022780a6f2f5f720f7ceb9b4/src/sionna/sys/esm_params/eesm_beta_table.json",
+      "sha256": "83a00d32841d4ccaab0c8dde3f2bb047216aed91aa9bf528bab97c79227a845e",
+      "bytes": 1368
+    },
+    {
+      "path": "LICENSE-sionna",
+      "source": "https://raw.githubusercontent.com/NVlabs/sionna/2f0a3820269b53fd022780a6f2f5f720f7ceb9b4/LICENSE",
+      "sha256": "78d4571703b4ae47d96f32d678896a76749fbf0799db83c177f40be1c721375e",
+      "bytes": 658
+    },
+    {
+      "path": "Apache-2.0.txt",
+      "source": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358
+    }
+  ]
+}

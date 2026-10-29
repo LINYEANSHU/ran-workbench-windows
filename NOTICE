@@ -1,0 +1,10 @@
+RAN Workbench
+Copyright 2026 LINYEANSHU and contributors
+
+Licensed under the Apache License, Version 2.0.
+
+This distribution includes third-party software and reference data under
+their own licenses. See THIRD_PARTY_NOTICES.md, THIRD_PARTY_LICENSES/ in
+the Windows binary distribution, and ran_workbench/system/reference/.
+
+No private city models or user-created modelling datasets are included.

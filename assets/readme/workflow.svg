@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="236" viewBox="0 0 1200 236" role="img" aria-labelledby="title desc">
+<title id="title">RAN Workbench workspace boundaries</title>
+<desc id="desc">Modeling inspects user-supplied meshes separately. Workbench sends a scene copy to Strategy for NR experiments.</desc>
+<rect width="1200" height="236" rx="16" fill="#161c1a"/>
+<g font-family="Segoe UI, sans-serif" fill="#e3e2da">
+<text x="48" y="48" font-size="20" fill="#9fc7b8">LOCAL SOFTWARE · USER-SUPPLIED DATA</text>
+<text x="48" y="109" font-size="32" font-weight="600">Modeling</text>
+<text x="48" y="148" font-size="22" fill="#bdc7c1">Read-only mesh viewer</text>
+<path d="M358 78v102" stroke="#56665f" stroke-width="2" stroke-dasharray="5 7"/>
+<text x="402" y="109" font-size="32" font-weight="600">Workbench</text>
+<text x="402" y="148" font-size="22" fill="#bdc7c1">Scene + propagation</text>
+<path d="M736 112h79m-13-9 13 9-13 9" fill="none" stroke="#9fc7b8" stroke-width="3"/>
+<text x="735" y="148" font-size="18" fill="#9fc7b8">scene copy</text>
+<text x="869" y="109" font-size="32" font-weight="600">Strategy</text>
+<text x="869" y="148" font-size="22" fill="#bdc7c1">BS / UE experiments</text>
+<text x="48" y="205" font-size="18" fill="#a7b3ac">No personal models or city datasets are included in the repository or release.</text>
+</g></svg>

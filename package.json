@@ -1,0 +1,11 @@
+{
+  "name": "ran-workbench-windows",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Windows desktop workbench for city radio propagation and NR strategy experiments",
+  "license": "Apache-2.0",
+  "os": ["win32"],
+  "dependencies": {
+    "cesium": "1.146.0"
+  }
+}

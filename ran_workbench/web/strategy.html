@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NR 策略工作台</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/strategy.css">
+  <script defer src="/qtwebchannel.js"></script><script defer src="/i18n.js"></script><script defer src="/i18n_strategy.js"></script><script defer src="/strategy_model.js"></script><script defer src="/strategy_viewport.js"></script><script defer src="/strategy.js"></script>
+</head>
+<body data-ready="false">
+  <header class="masthead"><div><span class="eyebrow">RAN 工作台 / 系统</span><h1>NR 策略工作台 <span>Release 18</span></h1></div><div class="run-state"><span id="engine-dot"></span><span id="engine-status" role="status">连接本机工作台…</span></div></header>
+  <nav class="commandbar" aria-label="实验操作">
+    <div class="actions"><button id="new">新建</button><button id="open">打开实验</button><button id="save">保存</button><button id="export" disabled>导出结果</button><span class="divider"></span><button id="undo" disabled>撤销</button><button id="redo" disabled>重做</button><button id="reload" disabled>放弃草稿 / 读取最新</button></div>
+    <div class="actions"><button id="validate">校验流程</button><button id="cancel" disabled>取消</button><button id="run" class="primary">运行实验</button></div>
+  </nav>
+  <div class="document-line"><strong id="experiment-name">读取实验…</strong><span id="document-status"></span><span id="document-path" data-i18n-ignore></span><span id="backend-badge">CUDA 城市信道</span></div>
+  <div id="message" role="alert" hidden></div>
+  <div class="configuration" aria-label="实验时间与资源">
+    <label>时长 <input id="setting-slots" type="number" min="1" max="20000"> slot</label>
+    <label>子载波间隔 <select id="setting-mu"><option value="0">15 kHz</option><option value="1">30 kHz</option><option value="2">60 kHz</option><option value="3">120 kHz</option></select></label>
+    <label>PRB <input id="setting-n_prb" type="number" min="1" max="100"></label>
+    <label>随机种子 <input id="setting-seed" type="number" min="0"></label>
+    <label>信道 <select id="setting-channel_backend"><option value="rt">真实 CUDA / 城市场景</option><option value="reference_fixture">合成演示 · 非城市传播</option></select></label>
+    <button id="settings-detail" aria-expanded="false">更多资源设置</button>
+  </div>
+  <section id="extra-settings" hidden aria-label="高级资源设置"></section>
+  <main class="workspace">
+    <aside class="module-nav"><h2>设备与功能层</h2><label class="small-label" for="entity">查看对象</label><select id="entity"></select><div id="layer-list"></div><div class="nav-note">选择模块调整策略。<br>从输出圆点连接到兼容输入；选中连线可断开。</div><details><summary>标准与实现范围</summary><p>TS 38.214 V18.4.0：CQI/MCS table 1、TBS、两端口 Type-I 单面板码本。调度、反馈承载与 HARQ 为系统级抽象。</p><p>曲线覆盖 MCS 3–28、CBS 24–2000 bit；EESM 校准出处不完整。这里的结果不等于商用设备实测。</p><p>支持 1/2 发射与接收端口、RI 1/2、标准两端口 PMI；高维码本和完整协议栈尚未实现。</p></details></aside>
+    <section class="flow-panel" aria-label="可编辑策略流程">
+      <div class="panel-heading"><div><h2>策略流程</h2><span id="graph-count"></span></div><div class="actions"><button id="zoom-out" aria-label="缩小流程图">−</button><span id="zoom-label">100%</span><button id="zoom-in" aria-label="放大流程图">＋</button><button id="fit">适应画布</button><button id="disconnect" disabled>断开连线</button></div></div>
+      <div id="flow-viewport" tabindex="0" aria-label="流程图，可滚动和缩放"><svg id="graph" xmlns="http://www.w3.org/2000/svg" aria-label="BS、信道和 UE 策略节点"></svg></div>
+      <div class="flow-caption"><span id="connection-status">拖动空白处平移 · 滚轮缩放 · 拖动模块调整布局</span><span id="draft-status">已同步</span></div>
+    </section>
+    <aside class="inspector"><div class="inspector-heading"><span id="node-layer" class="eyebrow">参数检查</span><h2 id="node-title">选择一个模块</h2><p id="node-owner" data-i18n-ignore></p></div><form id="node-form"></form><div id="node-standard"></div><button id="apply" class="primary" disabled>应用修改</button><section id="trace-detail" hidden><h3>本次传输</h3><pre id="trace-json" data-i18n-ignore></pre></section></aside>
+  </main>
+  <section class="results" aria-label="实验结果">
+    <div class="result-heading"><div class="result-tabs" role="tablist"><button id="tab-summary" role="tab" aria-selected="true">结果概览</button><button id="tab-events" role="tab" aria-selected="false">时隙事件</button><button id="tab-comparison" role="tab" aria-selected="false">A/B 对比</button></div><div class="actions"><span id="result-scope">尚未运行</span><button id="pin" disabled>保存为基准 A</button><button id="compare" disabled>对比当前 B</button></div></div>
+    <div id="result-summary"><div class="empty-state"><strong>让策略经过一次完整闭环</strong><p>先选择 BS 或 UE 模块，调整策略后运行。这里将显示包交付吞吐量、时延、反馈成本和资源使用。</p></div></div>
+    <div id="result-events" hidden><div class="event-filters"><label>事件 <select id="event-type"><option value="all">全部</option><option value="tx">传输 / 重传</option><option value="csi_arrival">CSI 到达</option><option value="feedback_drop">反馈丢弃</option><option value="ack_arrival">ACK/NACK 到达</option></select></label><label>时隙 <input id="event-slot" type="number" placeholder="全部" min="0"></label><span id="event-count"></span></div><div id="event-table"></div></div>
+    <div id="result-comparison" hidden><p class="empty-copy">完成一次实验后保存为 A，修改策略再运行 B。场景、轨迹、时间、资源和种子需保持一致。</p></div>
+  </section>
+</body></html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>维港两岸 · 官方精细模型</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/vendor/cesium/Widgets/widgets.css">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/city.css">
+  <script>window.CESIUM_BASE_URL='/vendor/cesium/';</script>
+  <script defer src="/vendor/cesium/Cesium.js"></script>
+  <script defer src="/qtwebchannel.js"></script>
+  <script defer src="/i18n.js"></script>
+  <script defer src="/i18n_city.js"></script>
+  <script defer src="/city.js"></script>
+</head>
+<body data-ready="false">
+  <header class="city-header">
+    <div><h1>维港两岸</h1><p>香港政府官方精细城市模型</p></div>
+    <div class="city-state" id="city-status" role="status">正在读取本地模型…</div>
+    <button id="city-capture" type="button">保存截图</button>
+  </header>
+  <div id="city-error" class="city-error" role="alert" hidden></div>
+  <main class="city-workspace">
+    <aside class="city-panel" aria-label="城市模型检查">
+      <section class="city-section">
+        <h2>浏览两岸</h2>
+        <div class="city-bank-controls" role="group" aria-label="显示区域">
+          <button type="button" data-bank="all" aria-pressed="true">两岸</button>
+          <button type="button" data-bank="north" aria-pressed="false">九龙岸</button>
+          <button type="button" data-bank="south" aria-pressed="false">香港岛岸</button>
+        </div>
+        <div id="city-summary" class="city-summary"></div>
+        <p id="city-partial" class="notice" hidden>当前是已完成分区的预览；其余图幅尚未完成下载。</p>
+      </section>
+      <section class="city-section">
+        <h2>图幅</h2>
+        <label for="city-tile">定位到官方分区</label>
+        <select id="city-tile"><option value="">两岸全景</option></select>
+        <p id="city-tile-info" class="help">按图幅检查原始建筑、地形与基础设施。</p>
+      </section>
+      <section class="city-section">
+        <h2>检查单栋原始模型</h2>
+        <label for="city-search">模型编号筛选</label>
+        <input id="city-search" type="search" placeholder="输入官方模型编号" autocomplete="off">
+        <label for="city-asset">建筑与裙楼模型</label>
+        <select id="city-asset" size="6" aria-describedby="city-asset-count"></select>
+        <p id="city-asset-count" class="help"></p>
+        <button id="city-original" class="primary" type="button" disabled>查看原始贴图</button>
+        <button id="city-overview" type="button">返回精细几何总览</button>
+        <dl id="city-model-info" class="city-model-info"></dl>
+      </section>
+      <section class="city-section city-source">
+        <h2>数据基准</h2>
+        <p>平面：HK1980 / EPSG:2326<br>高程：香港主水平基准 HKPD</p>
+        <p>总览保留原始三角网格，使用统一材质着色。单栋检查读取原始模型与贴图。</p>
+        <p id="city-source"></p>
+        <p>此工作区用于真实模型检查，尚未接入城市三角网格的无线传播计算。</p>
+      </section>
+    </aside>
+    <section class="city-viewport" aria-label="三维城市模型">
+      <div id="city-canvas"></div>
+      <div class="city-view-label"><strong id="city-view-title">精细几何总览</strong><span id="city-view-description">鼠标左键旋转 · 中键平移 · 滚轮缩放</span></div>
+      <div class="city-footer"><span id="city-render-count">等待加载</span><span id="city-attribution"></span></div>
+    </section>
+  </main>
+</body>
+</html>
