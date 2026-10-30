@@ -35,6 +35,7 @@ resources/
 *.pdb
 *.db
 .pytest_cache/
+.pytest-tmp/
 .ruff_cache/
 .vscode/
 .idea/
