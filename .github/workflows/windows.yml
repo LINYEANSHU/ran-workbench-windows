@@ -11,10 +11,18 @@ jobs:
       QTWEBENGINE_CHROMIUM_FLAGS: --disable-gpu --no-sandbox
     steps:
       - uses: actions/checkout@v4
-      - run: python tools/publish_source.py . --audit-only
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Audit public checkout
+        if: github.event.repository.name == 'ran-workbench-windows'
+        run: python tools/publish_source.py . --audit-only
+      - name: Audit development export
+        if: github.event.repository.name != 'ran-workbench-windows'
+        shell: pwsh
+        run: python tools/publish_source.py "$env:RUNNER_TEMP/ran-source-export"
+      - name: Check README diagrams
+        run: python tools/render_readme_diagrams.py --check
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

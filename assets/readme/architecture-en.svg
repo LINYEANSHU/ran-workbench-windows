@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="810" viewBox="0 0 1200 810" role="img" aria-labelledby="title desc">
+<title id="title">RAN Workbench — System architecture</title>
+<desc id="desc">desktop → workbench: commands; desktop → strategy: commands; desktop → modeling: open model; workbench → strategy: copy / refresh; workbench → runner: RT job; strategy → runner: NR job; runner → worker: QProcess; worker → runner: JSONL / JSON; worker → cuda: RT mode only; modeling → meshes: read only</desc>
+<defs>
+<marker id="arrow-397763" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#397763"/></marker>
+<marker id="arrow-98713a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#98713a"/></marker>
+<marker id="arrow-64746c" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#64746c"/></marker>
+</defs>
+<rect width="1200" height="810" rx="18" fill="#f5f6f2"/>
+<g font-family="Segoe UI, Microsoft YaHei, PingFang SC, sans-serif">
+<text x="48" y="46" font-size="18" fill="#397763" font-weight="600" text-anchor="start">01 / ARCHITECTURE</text>
+<text x="48" y="96" font-size="40" fill="#172820" font-weight="600" text-anchor="start">System architecture</text>
+<text x="48" y="130" font-size="21" fill="#64746c" font-weight="400" text-anchor="start">One desktop. Separate state. Local computation.</text>
+<g id="desktop-scene" data-from="desktop" data-to="workbench">
+<title>commands</title>
+<path d="M248 395H292V218H350" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="desktop-experiment" data-from="desktop" data-to="strategy">
+<title>commands</title>
+<path d="M248 418H350" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="desktop-viewer" data-from="desktop" data-to="modeling">
+<title>open model</title>
+<path d="M248 442H292V633H350" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="scene-copy" data-from="workbench" data-to="strategy">
+<title>copy / refresh</title>
+<path d="M450 271V365" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="462" y="324" font-size="18" fill="#397763" font-weight="400" text-anchor="start">copy / refresh</text>
+</g>
+<g id="scene-job" data-from="workbench" data-to="runner">
+<title>RT job</title>
+<path d="M550 218H605V295H660" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="599" y="202" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">RT job</text>
+</g>
+<g id="experiment-job" data-from="strategy" data-to="runner">
+<title>NR job</title>
+<path d="M550 418H605V342H660" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="601" y="446" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">NR job</text>
+</g>
+<g id="spawn-worker" data-from="runner" data-to="worker">
+<title>QProcess</title>
+<path d="M860 298H960" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="910" y="284" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">QProcess</text>
+</g>
+<g id="worker-events" data-from="worker" data-to="runner">
+<title>JSONL / JSON</title>
+<path d="M960 343H860" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="910" y="390" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">JSONL / JSON</text>
+</g>
+<g id="rt-only" data-from="worker" data-to="cuda">
+<title>RT mode only</title>
+<path d="M1060 371V510" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="1048" y="450" font-size="18" fill="#397763" font-weight="400" text-anchor="end">RT mode only</text>
+</g>
+<g id="viewer-reads" data-from="modeling" data-to="meshes">
+<title>read only</title>
+<path d="M550 633H660" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+<text x="605" y="617" font-size="18" fill="#64746c" font-weight="400" text-anchor="middle">read only</text>
+</g>
+<g id="desktop">
+<title>Desktop shell: QtWebEngine · QWebChannel</title>
+<rect x="48" y="365" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 388h18" stroke="#397763" stroke-width="3"/>
+<text x="66" y="415" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Desktop shell</text>
+<text x="66" y="438" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">QtWebEngine</text>
+<text x="66" y="458" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">QWebChannel</text>
+</g>
+<g id="workbench">
+<title>Workbench: Scene + job state</title>
+<rect x="350" y="165" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 188h18" stroke="#397763" stroke-width="3"/>
+<text x="368" y="215" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Workbench</text>
+<text x="368" y="238" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Scene + job state</text>
+</g>
+<g id="strategy">
+<title>Strategy: Experiment + A/B comparison</title>
+<rect x="350" y="365" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 388h18" stroke="#397763" stroke-width="3"/>
+<text x="368" y="415" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Strategy</text>
+<text x="368" y="438" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Experiment</text>
+<text x="368" y="458" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">A/B comparison</text>
+</g>
+<g id="modeling">
+<title>Modeling: Read-only mesh viewer</title>
+<rect x="350" y="580" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 603h18" stroke="#64746c" stroke-width="3"/>
+<text x="368" y="630" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Modeling</text>
+<text x="368" y="653" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Read-only</text>
+<text x="368" y="673" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">mesh viewer</text>
+</g>
+<g id="runner">
+<title>JobRunner: One child per runner</title>
+<rect x="660" y="265" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M678 288h18" stroke="#397763" stroke-width="3"/>
+<text x="678" y="315" font-size="22" fill="#172820" font-weight="600" text-anchor="start">JobRunner</text>
+<text x="678" y="338" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">One child per runner</text>
+</g>
+<g id="worker">
+<title>Compute process: RT engine / NR simulator</title>
+<rect x="960" y="265" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M978 288h18" stroke="#397763" stroke-width="3"/>
+<text x="978" y="315" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Compute process</text>
+<text x="978" y="338" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">RT engine</text>
+<text x="978" y="358" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">NR simulator</text>
+</g>
+<g id="cuda">
+<title>CUDA ray tracing: Sionna RT · Mitsuba · Dr.Jit</title>
+<rect x="960" y="510" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M978 533h18" stroke="#397763" stroke-width="3"/>
+<text x="978" y="560" font-size="22" fill="#172820" font-weight="600" text-anchor="start">CUDA ray tracing</text>
+<text x="978" y="583" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Sionna RT ·</text>
+<text x="978" y="603" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Mitsuba · Dr.Jit</text>
+</g>
+<g id="meshes">
+<title>Local model files: .city.json + meshes</title>
+<rect x="660" y="580" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M678 603h18" stroke="#64746c" stroke-width="3"/>
+<text x="678" y="630" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Local model files</text>
+<text x="678" y="653" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.city.json + meshes</text>
+</g>
+<text x="48" y="730" font-size="21" fill="#172820" font-weight="400" text-anchor="start">RT requires CUDA. Synthetic Strategy mode is explicitly selected.</text>
+<text x="48" y="762" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">Modeling meshes are never passed to the propagation solver.</text>
+</g>
+</svg>

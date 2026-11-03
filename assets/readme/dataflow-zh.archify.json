@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "RAN Workbench · 数据流",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/LINYEANSHU/ran-workbench-windows.git",
+      "revision": "e505d3bc3ccf80331d1c14c566cc1a5c50bf7193"
+    },
+    "output": ".archify/dataflow-ran-zh-20261103-030117/dataflow.html"
+  },
+  "stages": [
+    {
+      "label": "输入"
+    },
+    {
+      "label": "校验与状态"
+    },
+    {
+      "label": "计算或查看"
+    },
+    {
+      "label": "检查结果"
+    },
+    {
+      "label": "导出"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "scene-input",
+      "type": "external",
+      "label": "场景输入",
+      "sublabel": ".ran.json / GeoJSON",
+      "stage": 0,
+      "row": 0,
+      "sources": [
+        {
+          "path": "ran_workbench/automation_commands.py",
+          "line": 160,
+          "end_line": 181
+        },
+        {
+          "path": "ran_workbench/project_io.py",
+          "line": 33,
+          "end_line": 68
+        }
+      ]
+    },
+    {
+      "id": "scene",
+      "type": "backend",
+      "label": "场景状态",
+      "sublabel": "建筑 + BS / UE",
+      "stage": 1,
+      "row": 0,
+      "sources": [
+        {
+          "path": "ran_workbench/controller.py",
+          "line": 7,
+          "end_line": 39
+        },
+        {
+          "path": "ran_workbench/automation_commands.py",
+          "line": 182,
+          "end_line": 200
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 196,
+          "end_line": 228
+        }
+      ]
+    },
+    {
+      "id": "propagation",
+      "type": "backend",
+      "label": "RT 传播求解",
+      "sublabel": "覆盖 / UE / 探针",
+      "stage": 2,
+      "row": 0,
+      "sources": [
+        {
+          "path": "ran_workbench/engine.py",
+          "line": 307,
+          "end_line": 338
+        },
+        {
+          "path": "ran_workbench/engine.py",
+          "line": 450,
+          "end_line": 466
+        },
+        {
+          "path": "ran_workbench/worker.py",
+          "line": 43,
+          "end_line": 63
+        }
+      ]
+    },
+    {
+      "id": "rf-review",
+      "type": "backend",
+      "label": "检查 RF 结果",
+      "sublabel": "热力图与路径",
+      "stage": 3,
+      "row": 0,
+      "sources": [
+        {
+          "path": "ran_workbench/controller.py",
+          "line": 63,
+          "end_line": 76
+        },
+        {
+          "path": "ran_workbench/automation_commands.py",
+          "line": 204,
+          "end_line": 209
+        },
+        {
+          "path": "ran_workbench/project_io.py",
+          "line": 171,
+          "end_line": 225
+        }
+      ]
+    },
+    {
+      "id": "rf-export",
+      "type": "database",
+      "label": "RF 导出",
+      "sublabel": "JSON / CSV",
+      "stage": 4,
+      "row": 0,
+      "sources": [
+        {
+          "path": "ran_workbench/project_io.py",
+          "line": 214,
+          "end_line": 301
+        }
+      ]
+    },
+    {
+      "id": "strategy-input",
+      "type": "frontend",
+      "label": "策略输入",
+      "sublabel": "节点图与参数",
+      "stage": 0,
+      "row": 2,
+      "sources": [
+        {
+          "path": "ran_workbench/system/schema.py",
+          "line": 12,
+          "end_line": 31
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 104,
+          "end_line": 121
+        }
+      ]
+    },
+    {
+      "id": "experiment",
+      "type": "backend",
+      "label": "独立实验",
+      "sublabel": "场景 + 图 + 参数",
+      "stage": 1,
+      "row": 2,
+      "sources": [
+        {
+          "path": "ran_workbench/system/schema.py",
+          "line": 17,
+          "end_line": 31
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 133,
+          "end_line": 140
+        }
+      ]
+    },
+    {
+      "id": "simulation",
+      "type": "backend",
+      "label": "NR 时隙仿真",
+      "sublabel": "RT / 合成信道",
+      "stage": 2,
+      "row": 2,
+      "sources": [
+        {
+          "path": "ran_workbench/system/simulator.py",
+          "line": 27,
+          "end_line": 47
+        },
+        {
+          "path": "ran_workbench/system/simulator.py",
+          "line": 243,
+          "end_line": 266
+        },
+        {
+          "path": "ran_workbench/system/channel.py",
+          "line": 98,
+          "end_line": 140
+        }
+      ]
+    },
+    {
+      "id": "nr-review",
+      "type": "backend",
+      "label": "检查 NR 结果",
+      "sublabel": "指标与 A/B",
+      "stage": 3,
+      "row": 2,
+      "sources": [
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 54,
+          "end_line": 62
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 129,
+          "end_line": 159
+        }
+      ]
+    },
+    {
+      "id": "nr-export",
+      "type": "database",
+      "label": "NR 导出",
+      "sublabel": "JSON 指标 / 事件",
+      "stage": 4,
+      "row": 2,
+      "sources": [
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 14,
+          "end_line": 24
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 129,
+          "end_line": 132
+        }
+      ]
+    },
+    {
+      "id": "mesh-input",
+      "type": "database",
+      "label": "模型素材",
+      "sublabel": ".city.json + meshes",
+      "stage": 0,
+      "row": 4,
+      "sources": [
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 24,
+          "end_line": 48
+        }
+      ]
+    },
+    {
+      "id": "viewer",
+      "type": "frontend",
+      "label": "Modeling",
+      "sublabel": "只读查看",
+      "stage": 1,
+      "row": 4,
+      "sources": [
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 237,
+          "end_line": 258
+        },
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 86,
+          "end_line": 107
+        }
+      ]
+    },
+    {
+      "id": "screenshot",
+      "type": "database",
+      "label": "截图",
+      "sublabel": ".png",
+      "stage": 2,
+      "row": 4,
+      "sources": [
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 86,
+          "end_line": 107
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "import-scene",
+      "from": "scene-input",
+      "to": "scene",
+      "label": "导入 / 编辑"
+    },
+    {
+      "id": "scene-rt",
+      "from": "scene",
+      "to": "propagation",
+      "label": "场景快照"
+    },
+    {
+      "id": "rt-result",
+      "from": "propagation",
+      "to": "rf-review",
+      "label": "RF + 场景指纹"
+    },
+    {
+      "id": "save-rf",
+      "from": "rf-review",
+      "to": "rf-export",
+      "label": "用户导出"
+    },
+    {
+      "id": "graph-config",
+      "from": "strategy-input",
+      "to": "experiment",
+      "label": "图与参数"
+    },
+    {
+      "id": "copy-scene",
+      "from": "scene",
+      "to": "experiment",
+      "label": "场景副本"
+    },
+    {
+      "id": "run-experiment",
+      "from": "experiment",
+      "to": "simulation",
+      "label": "实验快照"
+    },
+    {
+      "id": "nr-result",
+      "from": "simulation",
+      "to": "nr-review",
+      "label": "NR + 实验指纹"
+    },
+    {
+      "id": "save-nr",
+      "from": "nr-review",
+      "to": "nr-export",
+      "label": "用户导出"
+    },
+    {
+      "id": "read-model",
+      "from": "mesh-input",
+      "to": "viewer",
+      "label": "本地素材"
+    },
+    {
+      "id": "save-image",
+      "from": "viewer",
+      "to": "screenshot",
+      "label": "截图保存"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "场景到 RF",
+      "items": [
+        "手工编辑或文件导入形成已校验的场景状态；子进程返回 RF 结果。",
+        "接收结果前检查场景指纹；导出由用户另行触发。"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "场景到 NR",
+      "items": [
+        "实验同时接收场景副本与图 / 参数，不从覆盖计算结果推导。",
+        "NR 生成信道快照，执行调度、CSI、链路自适应及 HARQ；实验指纹用于校验结果。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "独立查看路径",
+      "items": [
+        "用户提供的精细网格仅进入 Modeling 和截图路径。",
+        "场景与实验也可保存为 .ran.json 和 .ran-sim.json；它们是用户文件，不随软件分发。"
+      ]
+    }
+  ]
+}

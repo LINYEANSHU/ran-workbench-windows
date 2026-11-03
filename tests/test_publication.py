@@ -56,6 +56,27 @@ def test_audit_rejects_data_even_if_manually_added(tmp_path):
         audit_source(tmp_path)
 
 
+def test_export_keeps_readme_diagrams_but_rejects_unrelated_assets(tmp_path):
+    source = tmp_path / 'source'
+    approved = ['docs/diagrams.md', 'tools/render_readme_diagrams.py'] + [
+        f'assets/readme/{kind}-{locale}.{ext}'
+        for kind in ('architecture', 'dataflow')
+        for locale in ('en', 'zh')
+        for ext in ('svg', 'archify.json')
+    ]
+    rejected = ['assets/readme/private.json', 'assets/readme/architecture-en.html',
+                'assets/readme/architecture-en.delivery.json',
+                'assets/readme/source/private.svg']
+    for name in approved + rejected:
+        target = source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text('fixture', encoding='utf-8')
+    destination = tmp_path / 'public'
+    export_source(source, destination)
+    assert {p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()} == set(approved)
+    audit_source(destination)
+
+
 def test_binary_audit_checks_nested_model_files_even_under_licenses(tmp_path):
     for name in ('RANWorkbench.exe', 'LICENSE', 'NOTICE', 'README.md', 'README.zh-CN.md', 'THIRD_PARTY_NOTICES.md'):
         (tmp_path / name).write_text('software')

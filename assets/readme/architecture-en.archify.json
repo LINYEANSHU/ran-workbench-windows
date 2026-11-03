@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RAN Workbench · System architecture",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/LINYEANSHU/ran-workbench-windows.git",
+      "revision": "e505d3bc3ccf80331d1c14c566cc1a5c50bf7193"
+    },
+    "output": ".archify/architecture-ran-en-20261103-030117/architecture.html"
+  },
+  "components": [
+    {
+      "id": "desktop",
+      "type": "frontend",
+      "label": "Desktop shell",
+      "sublabel": "QtWebEngine · QWebChannel",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 296,
+          "end_line": 332
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 133,
+          "end_line": 153
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 237,
+          "end_line": 258
+        }
+      ]
+    },
+    {
+      "id": "workbench",
+      "type": "backend",
+      "label": "Workbench",
+      "sublabel": "Scene + job state",
+      "pos": [
+        350,
+        40
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 114,
+          "end_line": 151
+        },
+        {
+          "path": "ran_workbench/automation_commands.py",
+          "line": 160,
+          "end_line": 209
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 196,
+          "end_line": 228
+        }
+      ]
+    },
+    {
+      "id": "strategy",
+      "type": "backend",
+      "label": "Strategy",
+      "sublabel": "Experiment + A/B comparison",
+      "pos": [
+        350,
+        240
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 26,
+          "end_line": 62
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 116,
+          "end_line": 159
+        }
+      ]
+    },
+    {
+      "id": "modeling",
+      "type": "frontend",
+      "label": "Modeling",
+      "sublabel": "Read-only mesh viewer",
+      "pos": [
+        350,
+        450
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 237,
+          "end_line": 258
+        },
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 24,
+          "end_line": 48
+        },
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 172,
+          "end_line": 191
+        }
+      ]
+    },
+    {
+      "id": "runner",
+      "type": "backend",
+      "label": "JobRunner",
+      "sublabel": "One child per runner",
+      "pos": [
+        660,
+        140
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/jobs.py",
+          "line": 10,
+          "end_line": 52
+        },
+        {
+          "path": "ran_workbench/jobs.py",
+          "line": 60,
+          "end_line": 106
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "Compute process",
+      "sublabel": "RT engine / NR simulator",
+      "pos": [
+        960,
+        140
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/worker.py",
+          "line": 31,
+          "end_line": 67
+        },
+        {
+          "path": "ran_workbench/system/simulator.py",
+          "line": 27,
+          "end_line": 34
+        }
+      ]
+    },
+    {
+      "id": "cuda",
+      "type": "backend",
+      "label": "CUDA ray tracing",
+      "sublabel": "Sionna RT · Mitsuba · Dr.Jit",
+      "pos": [
+        960,
+        360
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/engine.py",
+          "line": 20,
+          "end_line": 43
+        },
+        {
+          "path": "ran_workbench/system/channel.py",
+          "line": 98,
+          "end_line": 140
+        }
+      ]
+    },
+    {
+      "id": "meshes",
+      "type": "database",
+      "label": "Local model files",
+      "sublabel": ".city.json + meshes",
+      "pos": [
+        660,
+        450
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 24,
+          "end_line": 48
+        },
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 45,
+          "end_line": 98
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "desktop-scene",
+      "to": "workbench",
+      "label": "commands",
+      "from": "desktop"
+    },
+    {
+      "id": "desktop-experiment",
+      "to": "strategy",
+      "label": "commands",
+      "from": "desktop"
+    },
+    {
+      "id": "desktop-viewer",
+      "to": "modeling",
+      "label": "open model",
+      "from": "desktop"
+    },
+    {
+      "id": "scene-copy",
+      "to": "strategy",
+      "label": "copy / refresh",
+      "variant": "emphasis",
+      "from": "workbench"
+    },
+    {
+      "id": "scene-job",
+      "to": "runner",
+      "label": "RT job",
+      "from": "workbench"
+    },
+    {
+      "id": "experiment-job",
+      "to": "runner",
+      "label": "NR job",
+      "from": "strategy"
+    },
+    {
+      "id": "spawn-worker",
+      "to": "worker",
+      "label": "QProcess",
+      "variant": "emphasis",
+      "from": "runner"
+    },
+    {
+      "id": "worker-events",
+      "to": "runner",
+      "label": "JSONL / JSON",
+      "from": "worker"
+    },
+    {
+      "id": "rt-only",
+      "to": "cuda",
+      "label": "RT mode only",
+      "from": "worker"
+    },
+    {
+      "id": "viewer-reads",
+      "to": "meshes",
+      "label": "read only",
+      "from": "modeling"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "One window, separate state",
+      "items": [
+        "Workbench and Strategy have their own controllers and JobRunner instances.",
+        "Opening Strategy copies the scene; explicit refresh creates a new experiment after unsaved-change checks."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Local execution",
+      "items": [
+        "Qt serves bundled assets via ran://. The optional CLI calls token-protected loopback HTTP.",
+        "JobRunner writes input.json and reads result.json; worker progress travels as JSON lines."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Compute boundaries",
+      "items": [
+        "Propagation and the RT channel require CUDA. The explicitly selected synthetic Strategy fixture is a separate path.",
+        "Detailed Modeling meshes are for viewing only and never feed the propagation solver."
+      ]
+    }
+  ]
+}

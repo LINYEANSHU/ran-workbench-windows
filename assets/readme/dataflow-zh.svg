@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">RAN Workbench — 从场景到结果</title>
+<desc id="desc">scene-input → scene: 导入 / 编辑; scene → propagation: 场景快照; propagation → rf-review: RF + 场景指纹; rf-review → rf-export: 用户导出; strategy-input → experiment: 图与参数; scene → experiment: 场景副本; experiment → simulation: 实验快照; simulation → nr-review: NR + 实验指纹; nr-review → nr-export: 用户导出; mesh-input → viewer: 本地素材; viewer → screenshot: 截图保存</desc>
+<defs>
+<marker id="arrow-397763" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#397763"/></marker>
+<marker id="arrow-98713a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#98713a"/></marker>
+<marker id="arrow-64746c" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#64746c"/></marker>
+</defs>
+<rect width="1200" height="800" rx="18" fill="#f5f6f2"/>
+<g font-family="Segoe UI, Microsoft YaHei, PingFang SC, sans-serif">
+<text x="48" y="46" font-size="18" fill="#397763" font-weight="600" text-anchor="start">02 / DATA FLOW</text>
+<text x="48" y="96" font-size="40" fill="#172820" font-weight="600" text-anchor="start">从场景到结果</text>
+<text x="48" y="130" font-size="21" fill="#64746c" font-weight="400" text-anchor="start">两条计算路径，以及独立的模型查看路径。</text>
+<text x="60" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">01  输入</text>
+<text x="290" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">02  校验与状态</text>
+<text x="520" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">03  计算或查看</text>
+<text x="750" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">04  检查结果</text>
+<text x="980" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">05  导出</text>
+<text x="48" y="215" font-size="20" fill="#397763" font-weight="600" text-anchor="start">传播 · 从几何到无线覆盖</text>
+<text x="48" y="429" font-size="20" fill="#98713a" font-weight="600" text-anchor="start">策略 · NR 时隙实验</text>
+<text x="48" y="643" font-size="20" fill="#64746c" font-weight="600" text-anchor="start">建模 · 用户自备素材，仅供查看</text>
+<g id="import-scene" data-from="scene-input" data-to="scene">
+<title>导入 / 编辑</title>
+<path d="M232 283H278" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="scene-rt" data-from="scene" data-to="propagation">
+<title>场景快照</title>
+<path d="M462 283H508" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="rt-result" data-from="propagation" data-to="rf-review">
+<title>RF + 场景指纹</title>
+<path d="M692 283H738" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="save-rf" data-from="rf-review" data-to="rf-export">
+<title>用户导出</title>
+<path d="M922 283H968" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="graph-config" data-from="strategy-input" data-to="experiment">
+<title>图与参数</title>
+<path d="M232 497H278" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="copy-scene" data-from="scene" data-to="experiment">
+<title>场景副本</title>
+<path d="M372 338V442" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+<text x="386" y="394" font-size="18" fill="#98713a" font-weight="400" text-anchor="start">场景副本</text>
+</g>
+<g id="run-experiment" data-from="experiment" data-to="simulation">
+<title>实验快照</title>
+<path d="M462 497H508" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="nr-result" data-from="simulation" data-to="nr-review">
+<title>NR + 实验指纹</title>
+<path d="M692 497H738" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="save-nr" data-from="nr-review" data-to="nr-export">
+<title>用户导出</title>
+<path d="M922 497H968" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="read-model" data-from="mesh-input" data-to="viewer">
+<title>本地素材</title>
+<path d="M232 711H278" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="save-image" data-from="viewer" data-to="screenshot">
+<title>截图保存</title>
+<path d="M462 711H508" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="scene-input">
+<title>场景输入: .ran.json / GeoJSON</title>
+<rect x="48" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 251h18" stroke="#397763" stroke-width="3"/>
+<text x="66" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">场景输入</text>
+<text x="66" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.ran.json</text>
+<text x="66" y="321" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">GeoJSON</text>
+</g>
+<g id="scene">
+<title>场景状态: 建筑 + BS / UE</title>
+<rect x="278" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 251h18" stroke="#397763" stroke-width="3"/>
+<text x="296" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">场景状态</text>
+<text x="296" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">建筑 + BS / UE</text>
+</g>
+<g id="propagation">
+<title>RT 传播求解: 覆盖 / UE / 探针</title>
+<rect x="508" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 251h18" stroke="#397763" stroke-width="3"/>
+<text x="526" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">RT 传播求解</text>
+<text x="526" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">覆盖 / UE / 探针</text>
+</g>
+<g id="rf-review">
+<title>检查 RF 结果: 热力图与路径</title>
+<rect x="738" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M756 251h18" stroke="#397763" stroke-width="3"/>
+<text x="756" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">检查 RF 结果</text>
+<text x="756" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">热力图与路径</text>
+</g>
+<g id="rf-export">
+<title>RF 导出: JSON / CSV</title>
+<rect x="968" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M986 251h18" stroke="#397763" stroke-width="3"/>
+<text x="986" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">RF 导出</text>
+<text x="986" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">JSON / CSV</text>
+</g>
+<g id="strategy-input">
+<title>策略输入: 节点图与参数</title>
+<rect x="48" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="66" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">策略输入</text>
+<text x="66" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">节点图与参数</text>
+</g>
+<g id="experiment">
+<title>独立实验: 场景 + 图 + 参数</title>
+<rect x="278" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="296" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">独立实验</text>
+<text x="296" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">场景 + 图 + 参数</text>
+</g>
+<g id="simulation">
+<title>NR 时隙仿真: RT / 合成信道</title>
+<rect x="508" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="526" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">NR 时隙仿真</text>
+<text x="526" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">RT / 合成信道</text>
+</g>
+<g id="nr-review">
+<title>检查 NR 结果: 指标与 A/B</title>
+<rect x="738" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M756 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="756" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">检查 NR 结果</text>
+<text x="756" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">指标与 A/B</text>
+</g>
+<g id="nr-export">
+<title>NR 导出: JSON 指标 / 事件</title>
+<rect x="968" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M986 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="986" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">NR 导出</text>
+<text x="986" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">JSON 指标 / 事件</text>
+</g>
+<g id="mesh-input">
+<title>模型素材: .city.json + meshes</title>
+<rect x="48" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="66" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">模型素材</text>
+<text x="66" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.city.json</text>
+<text x="66" y="749" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">meshes</text>
+</g>
+<g id="viewer">
+<title>Modeling: 只读查看</title>
+<rect x="278" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="296" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Modeling</text>
+<text x="296" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">只读查看</text>
+</g>
+<g id="screenshot">
+<title>截图: .png</title>
+<rect x="508" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="526" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">截图</text>
+<text x="526" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.png</text>
+</g>
+<text x="758" y="700" font-size="22" fill="#172820" font-weight="600" text-anchor="start">场景 / 实验指纹</text>
+<text x="758" y="730" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">接收结果前核对版本。</text>
+<text x="758" y="762" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">导出由用户另行触发。</text>
+</g>
+</svg>

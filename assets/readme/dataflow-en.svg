@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">RAN Workbench — From scene to results</title>
+<desc id="desc">scene-input → scene: import / edit; scene → propagation: scene snapshot; propagation → rf-review: RF + scene hash; rf-review → rf-export: user export; strategy-input → experiment: graph + settings; scene → experiment: scene copy; experiment → simulation: experiment; simulation → nr-review: NR + exp hash; nr-review → nr-export: user export; mesh-input → viewer: local assets; viewer → screenshot: capture</desc>
+<defs>
+<marker id="arrow-397763" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#397763"/></marker>
+<marker id="arrow-98713a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#98713a"/></marker>
+<marker id="arrow-64746c" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#64746c"/></marker>
+</defs>
+<rect width="1200" height="800" rx="18" fill="#f5f6f2"/>
+<g font-family="Segoe UI, Microsoft YaHei, PingFang SC, sans-serif">
+<text x="48" y="46" font-size="18" fill="#397763" font-weight="600" text-anchor="start">02 / DATA FLOW</text>
+<text x="48" y="96" font-size="40" fill="#172820" font-weight="600" text-anchor="start">From scene to results</text>
+<text x="48" y="130" font-size="21" fill="#64746c" font-weight="400" text-anchor="start">Two compute paths and one independent model viewer.</text>
+<text x="60" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">01  Inputs</text>
+<text x="290" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">02  Validated state</text>
+<text x="520" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">03  Compute / view</text>
+<text x="750" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">04  Inspect</text>
+<text x="980" y="177" font-size="18" fill="#64746c" font-weight="600" text-anchor="start">05  Export</text>
+<text x="48" y="215" font-size="20" fill="#397763" font-weight="600" text-anchor="start">PROPAGATION · geometry to radio coverage</text>
+<text x="48" y="429" font-size="20" fill="#98713a" font-weight="600" text-anchor="start">STRATEGY · NR slots</text>
+<text x="48" y="643" font-size="20" fill="#64746c" font-weight="600" text-anchor="start">MODELING · user-supplied assets, view only</text>
+<g id="import-scene" data-from="scene-input" data-to="scene">
+<title>import / edit</title>
+<path d="M232 283H278" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="scene-rt" data-from="scene" data-to="propagation">
+<title>scene snapshot</title>
+<path d="M462 283H508" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="rt-result" data-from="propagation" data-to="rf-review">
+<title>RF + scene hash</title>
+<path d="M692 283H738" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="save-rf" data-from="rf-review" data-to="rf-export">
+<title>user export</title>
+<path d="M922 283H968" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="graph-config" data-from="strategy-input" data-to="experiment">
+<title>graph + settings</title>
+<path d="M232 497H278" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="copy-scene" data-from="scene" data-to="experiment">
+<title>scene copy</title>
+<path d="M372 338V442" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+<text x="386" y="394" font-size="18" fill="#98713a" font-weight="400" text-anchor="start">scene copy</text>
+</g>
+<g id="run-experiment" data-from="experiment" data-to="simulation">
+<title>experiment</title>
+<path d="M462 497H508" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="nr-result" data-from="simulation" data-to="nr-review">
+<title>NR + exp hash</title>
+<path d="M692 497H738" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="save-nr" data-from="nr-review" data-to="nr-export">
+<title>user export</title>
+<path d="M922 497H968" fill="none" stroke="#98713a" stroke-width="2" marker-end="url(#arrow-98713a)"/>
+</g>
+<g id="read-model" data-from="mesh-input" data-to="viewer">
+<title>local assets</title>
+<path d="M232 711H278" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="save-image" data-from="viewer" data-to="screenshot">
+<title>capture</title>
+<path d="M462 711H508" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="scene-input">
+<title>Scene inputs: .ran.json / GeoJSON</title>
+<rect x="48" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 251h18" stroke="#397763" stroke-width="3"/>
+<text x="66" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Scene inputs</text>
+<text x="66" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.ran.json</text>
+<text x="66" y="321" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">GeoJSON</text>
+</g>
+<g id="scene">
+<title>Scene state: Buildings + BS / UE</title>
+<rect x="278" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 251h18" stroke="#397763" stroke-width="3"/>
+<text x="296" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Scene state</text>
+<text x="296" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Buildings + BS</text>
+<text x="296" y="321" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">UE</text>
+</g>
+<g id="propagation">
+<title>RT propagation: Coverage / UE / probe</title>
+<rect x="508" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 251h18" stroke="#397763" stroke-width="3"/>
+<text x="526" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">RT propagation</text>
+<text x="526" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Coverage /</text>
+<text x="526" y="321" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">UE / probe</text>
+</g>
+<g id="rf-review">
+<title>Inspect RF: Heatmap + paths</title>
+<rect x="738" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M756 251h18" stroke="#397763" stroke-width="3"/>
+<text x="756" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Inspect RF</text>
+<text x="756" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Heatmap + paths</text>
+</g>
+<g id="rf-export">
+<title>RF export: JSON / CSV</title>
+<rect x="968" y="228" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M986 251h18" stroke="#397763" stroke-width="3"/>
+<text x="986" y="278" font-size="22" fill="#172820" font-weight="600" text-anchor="start">RF export</text>
+<text x="986" y="301" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">JSON / CSV</text>
+</g>
+<g id="strategy-input">
+<title>Strategy inputs: Graph + settings</title>
+<rect x="48" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="66" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Strategy inputs</text>
+<text x="66" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Graph + settings</text>
+</g>
+<g id="experiment">
+<title>Experiment: Scene + graph + settings</title>
+<rect x="278" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="296" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Experiment</text>
+<text x="296" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Scene + graph</text>
+<text x="296" y="535" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">+ settings</text>
+</g>
+<g id="simulation">
+<title>NR simulation: RT / synthetic channel</title>
+<rect x="508" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="526" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">NR simulation</text>
+<text x="526" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">RT</text>
+<text x="526" y="535" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">synthetic channel</text>
+</g>
+<g id="nr-review">
+<title>Inspect NR: Metrics + A/B</title>
+<rect x="738" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M756 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="756" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Inspect NR</text>
+<text x="756" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Metrics + A/B</text>
+</g>
+<g id="nr-export">
+<title>NR export: JSON metrics / trace</title>
+<rect x="968" y="442" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M986 465h18" stroke="#98713a" stroke-width="3"/>
+<text x="986" y="492" font-size="22" fill="#172820" font-weight="600" text-anchor="start">NR export</text>
+<text x="986" y="515" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">JSON metrics</text>
+<text x="986" y="535" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">trace</text>
+</g>
+<g id="mesh-input">
+<title>Model assets: .city.json + meshes</title>
+<rect x="48" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="66" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Model assets</text>
+<text x="66" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.city.json</text>
+<text x="66" y="749" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">meshes</text>
+</g>
+<g id="viewer">
+<title>Modeling: Read-only view</title>
+<rect x="278" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M296 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="296" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Modeling</text>
+<text x="296" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Read-only view</text>
+</g>
+<g id="screenshot">
+<title>Screenshot: .png</title>
+<rect x="508" y="656" width="184" height="110" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M526 679h18" stroke="#64746c" stroke-width="3"/>
+<text x="526" y="706" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Screenshot</text>
+<text x="526" y="729" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.png</text>
+</g>
+<text x="758" y="700" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Scene / experiment hashes</text>
+<text x="758" y="730" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">checked before accepting results.</text>
+<text x="758" y="762" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">Export is a separate user action.</text>
+</g>
+</svg>

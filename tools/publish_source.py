@@ -16,8 +16,14 @@ ROOT_FILES = {'main.py', 'README.md', 'README.zh-CN.md', 'LICENSE', 'NOTICE',
 REFERENCE_FILES = {'PDSCH_table1.json', 'eesm_beta_table.json', 'manifest.json',
                    'LICENSE-sionna', 'Apache-2.0.txt'}
 TOOLS = {'build_windows.py', 'package_policy.py', 'publish_source.py',
-         'fetch_nr_reference.py', 'verify_public_release.py'}
-DOCS = {'windows-guide.md', 'windows-guide.zh-CN.md'}
+         'fetch_nr_reference.py', 'verify_public_release.py', 'render_readme_diagrams.py'}
+DOCS = {'windows-guide.md', 'windows-guide.zh-CN.md', 'diagrams.md'}
+README_ASSETS = {'workbench-en.png', 'workbench-zh.png', 'workflow.svg'} | {
+    f'{kind}-{language}.{extension}'
+    for kind in ('architecture', 'dataflow')
+    for language in ('en', 'zh')
+    for extension in ('svg', 'archify.json')
+}
 PRIVATE_SUFFIXES = ('.ran.json', '.ran-sim.json', '.city.json', '.geojson', '.obj',
                     '.stl', '.step', '.stp', '.f3d', '.blend', '.glb', '.gltf', '.ply')
 
@@ -42,7 +48,7 @@ def allowed(relative):
     if parts[0] == 'docs':
         return len(parts) == 2 and p.name in DOCS
     if parts[:2] == ('assets', 'readme'):
-        return len(parts) == 3 and p.name in {'workbench-en.png', 'workbench-zh.png', 'workflow.svg'}
+        return len(parts) == 3 and p.name in README_ASSETS
     if parts[:2] == ('.github', 'workflows'):
         return len(parts) == 3 and p.name == 'windows.yml'
     return False

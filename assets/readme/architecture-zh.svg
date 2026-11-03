@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="810" viewBox="0 0 1200 810" role="img" aria-labelledby="title desc">
+<title id="title">RAN Workbench — 系统架构</title>
+<desc id="desc">desktop → workbench: 场景命令; desktop → strategy: 实验命令; desktop → modeling: 打开模型; workbench → strategy: 复制 / 更新; workbench → runner: RT 任务; strategy → runner: NR 任务; runner → worker: QProcess; worker → runner: JSONL / JSON; worker → cuda: 仅 RT 模式; modeling → meshes: 只读</desc>
+<defs>
+<marker id="arrow-397763" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#397763"/></marker>
+<marker id="arrow-98713a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#98713a"/></marker>
+<marker id="arrow-64746c" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#64746c"/></marker>
+</defs>
+<rect width="1200" height="810" rx="18" fill="#f5f6f2"/>
+<g font-family="Segoe UI, Microsoft YaHei, PingFang SC, sans-serif">
+<text x="48" y="46" font-size="18" fill="#397763" font-weight="600" text-anchor="start">01 / ARCHITECTURE</text>
+<text x="48" y="96" font-size="40" fill="#172820" font-weight="600" text-anchor="start">系统架构</text>
+<text x="48" y="130" font-size="21" fill="#64746c" font-weight="400" text-anchor="start">同一桌面窗口，独立工作区状态，本机计算。</text>
+<g id="desktop-scene" data-from="desktop" data-to="workbench">
+<title>场景命令</title>
+<path d="M248 395H292V218H350" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="desktop-experiment" data-from="desktop" data-to="strategy">
+<title>实验命令</title>
+<path d="M248 418H350" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+</g>
+<g id="desktop-viewer" data-from="desktop" data-to="modeling">
+<title>打开模型</title>
+<path d="M248 442H292V633H350" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+</g>
+<g id="scene-copy" data-from="workbench" data-to="strategy">
+<title>复制 / 更新</title>
+<path d="M450 271V365" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="462" y="324" font-size="18" fill="#397763" font-weight="400" text-anchor="start">复制 / 更新</text>
+</g>
+<g id="scene-job" data-from="workbench" data-to="runner">
+<title>RT 任务</title>
+<path d="M550 218H605V295H660" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="599" y="202" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">RT 任务</text>
+</g>
+<g id="experiment-job" data-from="strategy" data-to="runner">
+<title>NR 任务</title>
+<path d="M550 418H605V342H660" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="601" y="446" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">NR 任务</text>
+</g>
+<g id="spawn-worker" data-from="runner" data-to="worker">
+<title>QProcess</title>
+<path d="M860 298H960" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="910" y="284" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">QProcess</text>
+</g>
+<g id="worker-events" data-from="worker" data-to="runner">
+<title>JSONL / JSON</title>
+<path d="M960 343H860" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="910" y="390" font-size="18" fill="#397763" font-weight="400" text-anchor="middle">JSONL / JSON</text>
+</g>
+<g id="rt-only" data-from="worker" data-to="cuda">
+<title>仅 RT 模式</title>
+<path d="M1060 371V510" fill="none" stroke="#397763" stroke-width="2" marker-end="url(#arrow-397763)"/>
+<text x="1048" y="450" font-size="18" fill="#397763" font-weight="400" text-anchor="end">仅 RT 模式</text>
+</g>
+<g id="viewer-reads" data-from="modeling" data-to="meshes">
+<title>只读</title>
+<path d="M550 633H660" fill="none" stroke="#64746c" stroke-width="2" marker-end="url(#arrow-64746c)"/>
+<text x="605" y="617" font-size="18" fill="#64746c" font-weight="400" text-anchor="middle">只读</text>
+</g>
+<g id="desktop">
+<title>桌面窗口: QtWebEngine · QWebChannel</title>
+<rect x="48" y="365" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M66 388h18" stroke="#397763" stroke-width="3"/>
+<text x="66" y="415" font-size="22" fill="#172820" font-weight="600" text-anchor="start">桌面窗口</text>
+<text x="66" y="438" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">QtWebEngine</text>
+<text x="66" y="458" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">QWebChannel</text>
+</g>
+<g id="workbench">
+<title>Workbench: 场景与任务状态</title>
+<rect x="350" y="165" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 188h18" stroke="#397763" stroke-width="3"/>
+<text x="368" y="215" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Workbench</text>
+<text x="368" y="238" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">场景与任务状态</text>
+</g>
+<g id="strategy">
+<title>Strategy: 实验与 A/B 对比</title>
+<rect x="350" y="365" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 388h18" stroke="#397763" stroke-width="3"/>
+<text x="368" y="415" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Strategy</text>
+<text x="368" y="438" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">实验与 A/B 对比</text>
+</g>
+<g id="modeling">
+<title>Modeling: 只读网格查看器</title>
+<rect x="350" y="580" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M368 603h18" stroke="#64746c" stroke-width="3"/>
+<text x="368" y="630" font-size="22" fill="#172820" font-weight="600" text-anchor="start">Modeling</text>
+<text x="368" y="653" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">只读网格查看器</text>
+</g>
+<g id="runner">
+<title>JobRunner: 每个 runner 管理一个子进程</title>
+<rect x="660" y="265" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M678 288h18" stroke="#397763" stroke-width="3"/>
+<text x="678" y="315" font-size="22" fill="#172820" font-weight="600" text-anchor="start">JobRunner</text>
+<text x="678" y="338" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">每个 runner</text>
+<text x="678" y="358" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">管理一个子进程</text>
+</g>
+<g id="worker">
+<title>计算子进程: RT 引擎 / NR 仿真器</title>
+<rect x="960" y="265" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M978 288h18" stroke="#397763" stroke-width="3"/>
+<text x="978" y="315" font-size="22" fill="#172820" font-weight="600" text-anchor="start">计算子进程</text>
+<text x="978" y="338" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">RT 引擎 / NR 仿真器</text>
+</g>
+<g id="cuda">
+<title>CUDA 射线追踪: Sionna RT · Mitsuba · Dr.Jit</title>
+<rect x="960" y="510" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M978 533h18" stroke="#397763" stroke-width="3"/>
+<text x="978" y="560" font-size="22" fill="#172820" font-weight="600" text-anchor="start">CUDA 射线追踪</text>
+<text x="978" y="583" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Sionna RT ·</text>
+<text x="978" y="603" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">Mitsuba · Dr.Jit</text>
+</g>
+<g id="meshes">
+<title>本地模型文件: .city.json + meshes</title>
+<rect x="660" y="580" width="200" height="106" rx="12" fill="#ffffff" stroke="#c9d3cb"/>
+<path d="M678 603h18" stroke="#64746c" stroke-width="3"/>
+<text x="678" y="630" font-size="22" fill="#172820" font-weight="600" text-anchor="start">本地模型文件</text>
+<text x="678" y="653" font-size="18" fill="#64746c" font-weight="400" text-anchor="start">.city.json + meshes</text>
+</g>
+<text x="48" y="730" font-size="21" fill="#172820" font-weight="400" text-anchor="start">RT 模式需要 CUDA；策略合成演示需显式选择。</text>
+<text x="48" y="762" font-size="20" fill="#64746c" font-weight="400" text-anchor="start">Modeling 精细网格不输入传播求解器。</text>
+</g>
+</svg>

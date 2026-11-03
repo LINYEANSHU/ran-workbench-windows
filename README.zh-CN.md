@@ -6,9 +6,11 @@
 
 Windows x64 桌面软件 · 中文 / English · Apache-2.0
 
+在本机编辑建筑和 BS / UE 部署，使用 Sionna RT 计算无线传播，并探索部分 3GPP NR 系统策略。
+
 ![RAN Workbench 中文界面及软件生成的合成街区](assets/readme/workbench-zh.png)
 
-在本机编辑建筑和 BS / UE 部署，使用 Sionna RT 计算无线传播，并探索部分 3GPP NR 系统策略。三个工作区共用一个窗口，界面资源随软件提供。
+[开始使用](#在-windows-开始使用) · [系统架构](#系统架构) · [数据流](#数据流) · [Windows 使用指南](docs/windows-guide.zh-CN.md)
 
 ## 在 Windows 开始使用
 
@@ -21,8 +23,6 @@ Windows x64 桌面软件 · 中文 / English · Apache-2.0
 
 ## 三个工作区
 
-![Modeling 查看用户提供的网格；Workbench 编辑并计算无线场景；Strategy 基于场景副本运行 BS 和 UE 实验](assets/readme/workflow.svg)
-
 | 工作区 | 用途 |
 | --- | --- |
 | **工作台 / Workbench** | 编辑多边形、圆形建筑、假定材质及 BS / UE；导入 GeoJSON；计算覆盖、多基站热力图、多径和频率响应；导出 JSON / CSV。 |
@@ -31,7 +31,27 @@ Windows x64 桌面软件 · 中文 / English · Apache-2.0
 
 Strategy 使用 Workbench 场景的副本。修改场景后，通过**从 Workbench 更新场景**建立新实验；不同工作区的修改和结果不会自动相互写回。
 
-**只发布软件：**仓库及 release 均不包含个人城市模型、下载的城市数据集或已保存的用户项目。测试几何由代码生成；导入和 Modeling 功能需要自行提供数据。
+**只发布软件**：仓库及 release 均不包含个人城市模型、下载的城市数据集或已保存的用户项目。测试几何由代码生成；导入和 Modeling 功能需要自行提供数据。
+
+## 系统架构
+
+三个工作区共用一个 Qt 桌面窗口。Workbench 和 Strategy 分别维护状态及 `JobRunner`，耗时计算在独立子进程中执行。界面资源通过本地 `ran://` 加载，并经 `QWebChannel` 与 Python 通信。
+
+[![RAN Workbench 架构：桌面分别向 Workbench、Strategy 和 Modeling 发送命令；场景与实验任务进入计算子进程，仅 RT 模式使用 CUDA；Modeling 单独读取本地网格。](assets/readme/architecture-zh.svg)](assets/readme/architecture-zh.svg)
+
+`JobRunner` 写入输入快照，通过 `QProcess` 启动子进程，接收 JSON 行进度并读取结果文件。子进程按任务分派给 RT 引擎或 NR 仿真器。**传播求解和 RT 信道需要 CUDA**；明确选择的策略合成演示使用另一条计算路径。
+
+## 数据流
+
+[![RAN Workbench 数据流：场景输入经校验后生成 RF 结果；场景副本与节点图参数形成 NR 实验和指标；RF 导出 JSON/CSV，NR 导出 JSON，Modeling 只导出截图。](assets/readme/dataflow-zh.svg)](assets/readme/dataflow-zh.svg)
+
+1. **场景 → RF**：手工编辑或导入 `.ran.json` / GeoJSON，校验建筑与 BS / UE 部署，再计算覆盖、UE 链路或探针。检查热力图和路径，按需导出 JSON / CSV。
+2. **场景副本 + 策略 → NR**：场景副本与 BS / 信道 / UE 节点图及参数组成实验。仿真器生成 RT 或合成信道快照，运行 NR 时隙，返回指标与事件，用于检查、A/B 对比及 JSON 导出。
+3. **精细网格 → 查看**：用户自备的 `.city.json` 清单和本地网格只进入 Modeling 与截图路径，不进入两条计算路径。
+
+接收结果前会核对场景或实验指纹；场景修改后，旧结果失效。保存的场景（`.ran.json`）与实验（`.ran-sim.json`）均为本地用户文件。
+
+两张图以已发布源码为依据，Archify 源文件保留了固定版本的代码引用。见[图源与重新生成说明](docs/diagrams.md)。
 
 ## 从源码运行
 

@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RAN Workbench · 系统架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/LINYEANSHU/ran-workbench-windows.git",
+      "revision": "e505d3bc3ccf80331d1c14c566cc1a5c50bf7193"
+    },
+    "output": ".archify/architecture-ran-zh-20261103-030117/architecture.html"
+  },
+  "components": [
+    {
+      "id": "desktop",
+      "type": "frontend",
+      "label": "桌面窗口",
+      "sublabel": "QtWebEngine · QWebChannel",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 296,
+          "end_line": 332
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 133,
+          "end_line": 153
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 237,
+          "end_line": 258
+        }
+      ]
+    },
+    {
+      "id": "workbench",
+      "type": "backend",
+      "label": "Workbench",
+      "sublabel": "场景与任务状态",
+      "pos": [
+        350,
+        40
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 114,
+          "end_line": 151
+        },
+        {
+          "path": "ran_workbench/automation_commands.py",
+          "line": 160,
+          "end_line": 209
+        },
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 196,
+          "end_line": 228
+        }
+      ]
+    },
+    {
+      "id": "strategy",
+      "type": "backend",
+      "label": "Strategy",
+      "sublabel": "实验与 A/B 对比",
+      "pos": [
+        350,
+        240
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 26,
+          "end_line": 62
+        },
+        {
+          "path": "ran_workbench/system/service.py",
+          "line": 116,
+          "end_line": 159
+        }
+      ]
+    },
+    {
+      "id": "modeling",
+      "type": "frontend",
+      "label": "Modeling",
+      "sublabel": "只读网格查看器",
+      "pos": [
+        350,
+        450
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/workspaces.py",
+          "line": 237,
+          "end_line": 258
+        },
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 24,
+          "end_line": 48
+        },
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 172,
+          "end_line": 191
+        }
+      ]
+    },
+    {
+      "id": "runner",
+      "type": "backend",
+      "label": "JobRunner",
+      "sublabel": "每个 runner 管理一个子进程",
+      "pos": [
+        660,
+        140
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/jobs.py",
+          "line": 10,
+          "end_line": 52
+        },
+        {
+          "path": "ran_workbench/jobs.py",
+          "line": 60,
+          "end_line": 106
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "计算子进程",
+      "sublabel": "RT 引擎 / NR 仿真器",
+      "pos": [
+        960,
+        140
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/worker.py",
+          "line": 31,
+          "end_line": 67
+        },
+        {
+          "path": "ran_workbench/system/simulator.py",
+          "line": 27,
+          "end_line": 34
+        }
+      ]
+    },
+    {
+      "id": "cuda",
+      "type": "backend",
+      "label": "CUDA 射线追踪",
+      "sublabel": "Sionna RT · Mitsuba · Dr.Jit",
+      "pos": [
+        960,
+        360
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/engine.py",
+          "line": 20,
+          "end_line": 43
+        },
+        {
+          "path": "ran_workbench/system/channel.py",
+          "line": 98,
+          "end_line": 140
+        }
+      ]
+    },
+    {
+      "id": "meshes",
+      "type": "database",
+      "label": "本地模型文件",
+      "sublabel": ".city.json + meshes",
+      "pos": [
+        660,
+        450
+      ],
+      "size": [
+        180,
+        78
+      ],
+      "sources": [
+        {
+          "path": "ran_workbench/city_desktop.py",
+          "line": 24,
+          "end_line": 48
+        },
+        {
+          "path": "ran_workbench/desktop.py",
+          "line": 45,
+          "end_line": 98
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "desktop-scene",
+      "to": "workbench",
+      "label": "场景命令",
+      "from": "desktop"
+    },
+    {
+      "id": "desktop-experiment",
+      "to": "strategy",
+      "label": "实验命令",
+      "from": "desktop"
+    },
+    {
+      "id": "desktop-viewer",
+      "to": "modeling",
+      "label": "打开模型",
+      "from": "desktop"
+    },
+    {
+      "id": "scene-copy",
+      "to": "strategy",
+      "label": "复制 / 更新",
+      "variant": "emphasis",
+      "from": "workbench"
+    },
+    {
+      "id": "scene-job",
+      "to": "runner",
+      "label": "RT 任务",
+      "from": "workbench"
+    },
+    {
+      "id": "experiment-job",
+      "to": "runner",
+      "label": "NR 任务",
+      "from": "strategy"
+    },
+    {
+      "id": "spawn-worker",
+      "to": "worker",
+      "label": "QProcess",
+      "variant": "emphasis",
+      "from": "runner"
+    },
+    {
+      "id": "worker-events",
+      "to": "runner",
+      "label": "JSONL / JSON",
+      "from": "worker"
+    },
+    {
+      "id": "rt-only",
+      "to": "cuda",
+      "label": "仅 RT 模式",
+      "from": "worker"
+    },
+    {
+      "id": "viewer-reads",
+      "to": "meshes",
+      "label": "只读",
+      "from": "modeling"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "一个窗口，独立状态",
+      "items": [
+        "Workbench 与 Strategy 分别维护状态及 JobRunner 实例。",
+        "首次打开 Strategy 使用场景副本；显式更新会检查未保存内容并建立新实验。"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "本机执行",
+      "items": [
+        "Qt 通过 ran:// 提供本地界面资源；可选 CLI 经令牌保护的回环 HTTP 调用。",
+        "JobRunner 写入 input.json、读取 result.json；子进程通过 JSON 行发送进度。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "计算边界",
+      "items": [
+        "传播求解及 RT 信道需要 CUDA；显式选择的策略合成演示使用独立路径。",
+        "Modeling 精细网格只用于查看，不输入传播求解器。"
+      ]
+    }
+  ]
+}
